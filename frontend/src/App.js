@@ -1,8 +1,9 @@
+import AppRouter from './components/AppRouter';
 import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <h1>Hello, World!</h1>
+    <AppRouter />
   );
 }
 
