@@ -1,13 +1,17 @@
 import { Routes, Route } from 'react-router-dom';
 import MainPage from '../pages/MainPage';
 import LoginPage from '../pages/LoginPage';
+import RegisterPage from '../pages/RegisterPage';
 
 const privateRoutes = [
-  { path: '/home', component: MainPage }
+  { path: '/home', component: MainPage },
+  { path: '/', component: MainPage }
 ];
 
 const publicRoutes = [
-  { path: '/login', component: LoginPage }
+  { path: '/login', component: LoginPage },
+  { path: '/register', component: RegisterPage },
+  { path: '/', component: LoginPage }
 ]
 
 const AppRouter = () => {

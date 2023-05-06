@@ -1,8 +1,17 @@
-import React from "react";
+import '../App.css';
+import SideMenu from '../components/SideBar';
+import ContentField from '../components/ContentField';
+import AppFooter from '../components/AppFooter';
 
 const MainPage = () => {
   return (
-    <div>MAIN PAGE</div>
+    <div className='d-flex'>
+      <SideMenu content="Groups" />
+      <div className='content-block'>
+        <ContentField />
+        <AppFooter />
+      </div>
+    </div>
   );
 }
 
