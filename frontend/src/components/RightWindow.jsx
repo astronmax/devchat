@@ -1,23 +1,14 @@
 import { useState } from "react";
 
-const RightWindow = () => {
-  let users = [
-    'user_1', 'user_2', 'user_3',
-    'user_1', 'user_2', 'user_3',
-    'user_1', 'user_2', 'user_3',
-    'user_1', 'user_2', 'user_3',
-    'user_1', 'user_2', 'user_3',
-    'user_1', 'user_2', 'user_3',
-    'user_1', 'user_2', 'user_3',
-    'user_1', 'user_2', 'user_3',
-  ].map((user) => {
-    return (
-      <div className="p-0 m-0 mb-2">
-        <a className="text-decoration-none link-secondary">{user}</a>
-      </div>
-    );
-  });
+const UserComponent = ({ username }) => {
+  return (
+    <div className="p-0 m-0 mb-2">
+      <a className="text-decoration-none link-secondary">{username}</a>
+    </div>
+  );
+}
 
+const RightWindow = ({ users }) => {
   let [display, setDisplay] = useState(true);
   let class_str = `right-window flex-column p-3 ${display ? 'd-flex' : 'd-none'}`
 
@@ -29,7 +20,7 @@ const RightWindow = () => {
           <img src="/icons/icon-cross.svg" width="40" height="40"></img>
         </a>
       </div>
-      <input type="text" class="form-control mb-3" placeholder="User name" />
+      <input type="text" className="form-control mb-3" placeholder="User name" />
       <div className="users-list">
         {users}
       </div>
