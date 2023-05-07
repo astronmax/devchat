@@ -3,7 +3,8 @@ import '../App.css';
 
 import {
   displayGroups,
-  displayDirects
+  displayDirects,
+  setContentStore
 } from '../MainWindowSlice'
 import { useDispatch } from 'react-redux';
 
@@ -31,10 +32,15 @@ const Dropdown = ({ username }) => {
   );
 }
 
-export const ListItem = ({ title }) => {
+export const ListItem = ({ title, id }) => {
+  const dispatch = useDispatch();
+
   return (
     <li className="nav-item">
-      <a href="/" className="nav-link link-light" aria-current="page">
+      <a href="/" className="nav-link link-light" onClick={(e) => {
+        e.preventDefault();
+        dispatch(setContentStore(id));
+      }}>
         <p className='sidebar-item'>{title}</p>
       </a>
     </li>
@@ -60,13 +66,13 @@ const SideBar = ({ username, content_type, items }) => {
         </a>
       </div>
       <div className={add_group_classes} style={{ height: "30px" }}>
-        <input type="text" className="form-control" placeholder="Group name" />
+        <input type="text" className="form-control" placeholder="Name" />
         <button className='btn btn-primary btn-sm'>Add</button>
       </div>
       <hr />
       <div className='sidebar-list'>
         <ul className="nav nav-pills flex-column mb-auto">
-          {items.map((item => { return (<ListItem title={item} key={item} />); }))}
+          {items.map((item => { return (<ListItem title={item.title} key={item.key} id={item.key} />); }))}
         </ul>
       </div>
       <hr />

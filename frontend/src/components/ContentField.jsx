@@ -9,21 +9,18 @@ const MessageBox = ({ username, body }) => {
   );
 }
 
-const ContentField = () => {
+const ContentField = ({ messages }) => {
   return (
     <div className='content-field'>
-      <MessageBox
-        username="John"
-        body="aaaaaaaaaaaaaaaa"
-      />
-      <MessageBox
-        username="John"
-        body="aaaaaaaaaaaaaaaa"
-      />
-      <MessageBox
-        username="John"
-        body="aaaaaaaaaaaaaaaa"
-      />
+      {messages.map((msg) => {
+        return (
+          <MessageBox
+            username={msg.username}
+            body={msg.body}
+            key={msg.key}
+          />
+        );
+      })}
     </div>
   );
 }
