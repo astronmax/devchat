@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import '../App.css';
 
 const Dropdown = ({ username }) => {
@@ -20,18 +21,34 @@ const ListItem = ({ title }) => {
   return (
     <li className="nav-item">
       <a href="/" className="nav-link link-light" aria-current="page">
-        {title}
+        <p className='sidebar-item'>{title}</p>
       </a>
     </li>
   );
 }
 
 const SideBar = ({ content }) => {
+  let [disp_add_group, setDisplayAddGroup] = useState('d-none');
+  let add_group_classes = `px-3 mt-3 ${disp_add_group}`;
+
+  const handleAddGroup = () => {
+    disp_add_group === 'd-none' ? setDisplayAddGroup('d-flex') : setDisplayAddGroup('d-none');
+  }
+
   return (
     <div className="sidebar d-flex flex-column flex-shrink-0 p-2 text-white">
-      <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-        {content}
-      </a>
+      <div className='d-flex justify-content-between'>
+        <a href="/" className="px-3 text-white text-decoration-none">
+          {content}
+        </a>
+        <a href="#" onClick={handleAddGroup}>
+          <img src="/icons/icon-plus-default.svg" width="25" height="25"></img>
+        </a>
+      </div>
+      <div className={add_group_classes} style={{ height: "30px" }}>
+        <input type="text" class="form-control" placeholder="Group name" />
+        <button className='btn btn-primary btn-sm'>Add</button>
+      </div>
       <hr />
       <div className='sidebar-list'>
         <ul className="nav nav-pills flex-column mb-auto">

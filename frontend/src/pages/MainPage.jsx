@@ -3,6 +3,7 @@ import SideBar from '../components/SideBar';
 import ContentField from '../components/ContentField';
 import AppFooter from '../components/AppFooter';
 import Header from '../components/Header';
+import RightWindow from '../components/RightWindow';
 
 const MainPage = () => {
   return (
@@ -13,6 +14,7 @@ const MainPage = () => {
         <ContentField />
         <AppFooter />
       </div>
+      <RightWindow />
     </div>
   );
 }
