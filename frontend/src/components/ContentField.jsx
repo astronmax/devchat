@@ -17,7 +17,7 @@ const ContentField = ({ messages }) => {
           <MessageBox
             username={msg.username}
             body={msg.body}
-            key={msg.key}
+            key={msg.id}
           />
         );
       })}

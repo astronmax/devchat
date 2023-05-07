@@ -4,9 +4,19 @@ import '../App.css';
 import {
   displayGroups,
   displayDirects,
-  setContentStore
+  setConversation,
+  selectSidebarDisplay,
+  selectConversation
 } from '../MainWindowSlice'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+const addGroup = () => {
+  let new_grp_input = document.getElementById("new_group_input");
+  let text = new_grp_input.value;
+
+  // add group logic...
+  window.location.reload();
+}
 
 const Dropdown = ({ username }) => {
   const dispatch = useDispatch();
@@ -32,14 +42,16 @@ const Dropdown = ({ username }) => {
   );
 }
 
-export const ListItem = ({ title, id }) => {
+export const ListItem = ({ title, conversation_id }) => {
   const dispatch = useDispatch();
+  const conversation = useSelector(selectConversation);
 
+  let active = (conversation === conversation_id) ? 'active' : '';
   return (
     <li className="nav-item">
-      <a href="/" className="nav-link link-light" onClick={(e) => {
+      <a href="/" className={`nav-link link-light ${active}`} onClick={(e) => {
         e.preventDefault();
-        dispatch(setContentStore(id));
+        dispatch(setConversation(conversation_id));
       }}>
         <p className='sidebar-item'>{title}</p>
       </a>
@@ -48,12 +60,8 @@ export const ListItem = ({ title, id }) => {
 }
 
 const SideBar = ({ username, content_type, items }) => {
-  let [disp_add_group, setDisplayAddGroup] = useState('d-none');
-  let add_group_classes = `px-3 mt-3 ${disp_add_group}`;
-
-  const handleAddGroup = () => {
-    disp_add_group === 'd-none' ? setDisplayAddGroup('d-flex') : setDisplayAddGroup('d-none');
-  }
+  const [display_add_group, setDisplayAddGroup] = useState(0);
+  const sidebar_display = useSelector(selectSidebarDisplay);
 
   return (
     <div className="sidebar d-flex flex-column flex-shrink-0 p-2 text-white">
@@ -61,18 +69,38 @@ const SideBar = ({ username, content_type, items }) => {
         <a href="/" className="px-3 text-white text-decoration-none">
           {content_type}
         </a>
-        <a href="#" onClick={handleAddGroup}>
-          <img src="/icons/icon-plus-default.svg" width="25" height="25"></img>
-        </a>
+        {
+          sidebar_display
+            ?
+            <></>
+            :
+            <a href="#" onClick={() => setDisplayAddGroup(!display_add_group)}>
+              <img src="/icons/icon-plus-default.svg" width="25" height="25"></img>
+            </a>
+        }
       </div>
-      <div className={add_group_classes} style={{ height: "30px" }}>
-        <input type="text" className="form-control" placeholder="Name" />
-        <button className='btn btn-primary btn-sm'>Add</button>
-      </div>
+      {
+        (display_add_group && !sidebar_display)
+          ?
+          <div className="px-3 mt-3 d-flex" id="display_add_group" style={{ height: "30px" }}>
+            <input type="text" id="new_group_input" className="form-control" placeholder="Name" />
+            <button className='btn btn-primary btn-sm' onClick={addGroup}>Add</button>
+          </div>
+          :
+          <></>
+      }
       <hr />
       <div className='sidebar-list'>
         <ul className="nav nav-pills flex-column mb-auto">
-          {items.map((item => { return (<ListItem title={item.title} key={item.key} id={item.key} />); }))}
+          {items.map((item => {
+            return (
+              <ListItem
+                title={item.title}
+                key={item.id}
+                conversation_id={item.id}
+              />
+            );
+          }))}
         </ul>
       </div>
       <hr />

@@ -8,34 +8,38 @@ import { useSelector } from 'react-redux';
 
 import {
   selectSidebarDisplay,
-  selectContentStore
+  selectConversation
 } from '../MainWindowSlice'
 
 const get_groups = () => {
+  console.log("Getting groups...");
   return [
-    { title: "group_1", key: 1 },
-    { title: "group_2", key: 2 },
-    { title: "group_3", key: 3 },
+    { title: "group_1", id: 100 },
+    { title: "group_2", id: 200 },
+    { title: "group_3", id: 300 },
   ];
 }
 
 const get_directs = () => {
+  console.log("Getting directs...");
   return [
-    { title: "direct_1", key: 1 },
-    { title: "direct_2", key: 2 },
-    { title: "direct_3", key: 3 },
+    { title: "direct_1", id: 101 },
+    { title: "direct_2", id: 201 },
+    { title: "direct_3", id: 301 },
   ];
 }
 
 const get_direct_msgs = (id) => {
+  console.log("Direct ", id);
   return [
-    { username: "John", body: "AAA (direct)", key: 1 }
+    { username: "John", body: "AAA (direct)", id: 1 }
   ];
 }
 
 const get_group_msgs = (id) => {
+  console.log("Group ", id);
   return [
-    { username: "John", body: "AAA (group)", key: 1 }
+    { username: "John", body: "AAA (group)", id: 1 }
   ];
 }
 
@@ -46,10 +50,10 @@ const MainPage = () => {
   const content_type = sidebar_display ? "Directs" : "Groups";
   let sidebar_items = sidebar_display ? get_directs() : get_groups();
 
-  const content_store_key = useSelector(selectContentStore);
+  const conversation = useSelector(selectConversation);
   let msgs = sidebar_display
-    ? get_direct_msgs(content_store_key)
-    : get_group_msgs(content_store_key);
+    ? get_direct_msgs(conversation)
+    : get_group_msgs(conversation);
 
   return (
     <div className='d-flex'>
