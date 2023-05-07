@@ -6,6 +6,7 @@ import {
   selectCurrentUser
 } from "../MainWindowSlice";
 import { noUserlistDisplay } from "../MainWindowSlice";
+import { useState } from "react";
 
 const addDirect = (user_id, current_user) => {
   console.log("Add direct with user: ", user_id);
@@ -35,11 +36,13 @@ const RightWindow = () => {
   const userlist_display = useSelector(selectUserlistDisplay);
   const dispatch = useDispatch();
 
-  const users = [
+  let users = [
     { username: "user_1", id: 1 },
     { username: "user_2", id: 2 },
     { username: "user_3", id: 3 }
   ];
+
+  const [users_filtered, setUsers] = useState(users);
 
   return (
     userlist_display
@@ -54,9 +57,18 @@ const RightWindow = () => {
             <img src="/icons/icon-cross.svg" width="40" height="40"></img>
           </a>
         </div >
-        <input type="text" className="form-control mb-3" placeholder="User name" />
+        <input type="text" id="search_user_input" className="form-control mb-3" onChange={() => {
+          let pattern = document.getElementById("search_user_input").value;
+          let new_users = [];
+          for (let i = 0; i < users.length; i++) {
+            if (users[i].username.includes(pattern)) {
+              new_users.push(users[i]);
+            }
+          }
+          setUsers(new_users);
+        }} placeholder="User name" />
         <div className="users-list">
-          {users.map(user => <UserComponent user={user} key={user.id} />)}
+          {users_filtered.map(user => <UserComponent user={user} key={user.id} />)}
         </div>
       </div >
       :
