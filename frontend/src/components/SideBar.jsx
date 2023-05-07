@@ -18,6 +18,10 @@ const addGroup = () => {
   window.location.reload();
 }
 
+const Signout = () => {
+  // sign out logic...
+}
+
 const Dropdown = ({ username }) => {
   const dispatch = useDispatch();
 
@@ -36,7 +40,7 @@ const Dropdown = ({ username }) => {
           dispatch(displayDirects());
         }} href="/">Directs</a></li>
         <li><hr className="dropdown-divider" /></li>
-        <li><a className="dropdown-item" href="/">Sign out</a></li>
+        <li><a className="dropdown-item" onClick={Signout} href="/">Sign out</a></li>
       </ul>
     </div>
   );
@@ -83,7 +87,11 @@ const SideBar = ({ username, content_type, items }) => {
         (display_add_group && !sidebar_display)
           ?
           <div className="px-3 mt-3 d-flex" id="display_add_group" style={{ height: "30px" }}>
-            <input type="text" id="new_group_input" className="form-control" placeholder="Name" />
+            <input type="text" id="new_group_input" onKeyUp={(event) => {
+              if (event.keyCode == 13) {
+                addGroup();
+              }
+            }} className="form-control" placeholder="Name" />
             <button className='btn btn-primary btn-sm' onClick={addGroup}>Add</button>
           </div>
           :
