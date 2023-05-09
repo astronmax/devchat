@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import MainPage from '../pages/MainPage';
 import AuthPage from '../pages/AuthPage';
+import { selectAuthorized } from '../AuthWindowSlice';
+import { useSelector } from 'react-redux';
 
 const privateRoutes = [
   { path: '/home', component: MainPage },
@@ -14,7 +16,7 @@ const publicRoutes = [
 ]
 
 const AppRouter = () => {
-  const auth = false;
+  const auth = useSelector(selectAuthorized);
   return (
     auth
       ?

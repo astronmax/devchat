@@ -8,7 +8,8 @@ import { useSelector } from 'react-redux';
 
 import {
   selectSidebarDisplay,
-  selectConversation
+  selectConversation,
+  selectCurrentUser
 } from '../MainWindowSlice'
 
 const get_groups = () => {
@@ -44,6 +45,8 @@ const get_group_msgs = (id) => {
 }
 
 const MainPage = () => {
+  const user_id = useSelector(selectCurrentUser);
+  console.log("USER ID", user_id);
   const username = "astron";
 
   const sidebar_display = useSelector(selectSidebarDisplay);

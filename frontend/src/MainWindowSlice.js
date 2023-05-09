@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   sidebar_display: 0,
   conversation: 0,
   userlist_display: 0,
   current_user: 0
-}
+};
 
 export const MainWindowSlice = createSlice({
   name: 'MainWindow',
