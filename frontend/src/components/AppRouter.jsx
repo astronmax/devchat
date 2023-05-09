@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import MainPage from '../pages/MainPage';
-import LoginPage from '../pages/LoginPage';
-import RegisterPage from '../pages/RegisterPage';
+import AuthPage from '../pages/AuthPage';
 
 const privateRoutes = [
   { path: '/home', component: MainPage },
@@ -9,13 +8,13 @@ const privateRoutes = [
 ];
 
 const publicRoutes = [
-  { path: '/login', component: LoginPage },
-  { path: '/register', component: RegisterPage },
-  { path: '/', component: LoginPage }
+  { path: '/login', component: AuthPage },
+  { path: '/register', component: AuthPage },
+  { path: '/', component: AuthPage }
 ]
 
 const AppRouter = () => {
-  const auth = true;
+  const auth = false;
   return (
     auth
       ?
@@ -29,7 +28,6 @@ const AppRouter = () => {
         {publicRoutes.map(route =>
           <Route path={route.path} Component={route.component} key={route.path} />
         )}
-        <Route path="*" Component={LoginPage} />
       </Routes>
   );
 }
