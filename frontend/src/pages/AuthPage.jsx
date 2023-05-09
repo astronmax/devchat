@@ -26,6 +26,13 @@ const tryLogin = (login, password) => {
 const registerUser = (username, password) => {
 }
 
+const loadJWT = (user_id) => {
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjM0LCJleHAiOiIyMDIzLTA1LTA5IDE2OjAwOjAwIn0.m_DcOz3Me3wNWjc0OyUqzeAncjbGtLn6W48CF-gX6V8";
+  document.cookie = `token=${token}`;
+
+  // send secret to server, get token, load to cookie
+}
+
 const ErrorMessage = ({ text }) => {
   return (
     <div className="alert alert-danger" role="alert">
@@ -35,6 +42,7 @@ const ErrorMessage = ({ text }) => {
 }
 
 const LoginPage = () => {
+  const remember = useSelector(selectRemember);
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const [error_msg, setErrorMsg] = useState('');
@@ -100,6 +108,9 @@ const LoginPage = () => {
 
             let user_id = tryLogin(login, password);
             if (user_id !== 0) {
+              if (remember == 1) {
+                loadJWT(user_id);
+              }
               setError(false);
               dispatch(setAuthorized());
               dispatch(setCurrentUser(user_id));
@@ -219,7 +230,6 @@ const RegisterPage = () => {
 
 const AuthPage = () => {
   const content_type = useSelector(selectAuthType);
-  const remember = useSelector(selectRemember);
 
   return (
     <div
