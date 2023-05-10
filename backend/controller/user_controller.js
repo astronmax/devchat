@@ -27,8 +27,8 @@ user_router.get('/jwt/get/:name/:password', async function (req, res) {
   }
 });
 
-user_router.get('/jwt/check', async function (req, res) {
-  res.send({ 'status': check_jwt(req.query['token']) });
+user_router.get('/jwt/check/:user_id', async function (req, res) {
+  res.send({ 'status': check_jwt(req.query['token'], req.params.user_id) });
 });
 
 export default user_router;

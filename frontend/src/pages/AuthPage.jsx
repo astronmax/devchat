@@ -13,24 +13,28 @@ import {
 } from '../AuthWindowSlice';
 import { setCurrentUser } from '../MainWindowSlice';
 import { useState } from 'react';
+import axios from 'axios';
 
-const tryLogin = (login, password) => {
-  // try login logic...
-  if (login === "none" && password === "none") {
-    return 1234;
+async function tryLogin(login, password) {
+  const pw_hash = (await axios.get(`http://127.0.0.1:4000/api/hash/${password}`)).data['result'];
+  const resp = (await axios.get(`http://127.0.0.1:4000/api/user/login/${login}/${pw_hash}`)).data;
+  if (resp['status'] === true) {
+    return resp['user_id'];
   }
 
   return 0;
 }
 
-const registerUser = (username, password) => {
+async function registerUser(username, password) {
+  const pw_hash = (await axios.get(`http://127.0.0.1:4000/api/hash/${password}`)).data['result'];
+  return (await axios.post(`http://127.0.0.1:4000/api/user/add/${username}/${pw_hash}`)).data['status'];
 }
 
-const loadJWT = (user_id) => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjM0LCJleHAiOiIyMDIzLTA1LTA5IDE2OjAwOjAwIn0.m_DcOz3Me3wNWjc0OyUqzeAncjbGtLn6W48CF-gX6V8";
-  document.cookie = `token=${token}`;
-
-  // send secret to server, get token, load to cookie
+async function loadJWT(name, password, user_id) {
+  const pw_hash = (await axios.get(`http://127.0.0.1:4000/api/hash/${password}`)).data['result'];
+  const resp = (await axios.get(`http://127.0.0.1:4000/api/user/jwt/get/${name}/${pw_hash}`)).data;
+  const token = resp['token'];
+  document.cookie = `token=${token}&user_id=${user_id}`;
 }
 
 const ErrorMessage = ({ text }) => {
@@ -99,17 +103,17 @@ const LoginPage = () => {
         </div>
       </div>
       <div className="row">
-        <button className="btn btn-primary btn-block mb-4" onClick={(e) => {
+        <button className="btn btn-primary btn-block mb-4" onClick={async function (e) {
           e.preventDefault();
           let login = document.getElementById("loginForm").value;
           let password = document.getElementById("passwordForm").value;
           if (validCreds(login, password)) {
             setError(false);
 
-            let user_id = tryLogin(login, password);
+            let user_id = await tryLogin(login, password);
             if (user_id !== 0) {
               if (remember == 1) {
-                loadJWT(user_id);
+                loadJWT(login, password, user_id);
               }
               setError(false);
               dispatch(setAuthorized());
@@ -203,15 +207,19 @@ const RegisterPage = () => {
           </div>
         </div>
         <div className="container d-inline-flex justify-content-around">
-          <button className="btn btn-primary btn-block mb-3" onClick={(e) => {
+          <button className="btn btn-primary btn-block mb-3" onClick={async function (e) {
             e.preventDefault();
             let username = document.getElementById("registerUsername").value;
             let password = document.getElementById("registerPassword").value;
             let repeat_password = document.getElementById("registerRepeatPassword").value;
             if (validCreds(username, password, repeat_password)) {
-              setError(false);
-              registerUser(username, password);
-              dispatch(displayLogin());
+              if ((await registerUser(username, password)) !== true) {
+                setError(true);
+                setErrorMsg("User with this name already exists");
+              } else {
+                setError(false);
+                dispatch(displayLogin());
+              }
             } else {
               document.getElementById("registerUsername").value = '';
               document.getElementById("registerPassword").value = '';

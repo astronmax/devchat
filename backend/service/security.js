@@ -10,7 +10,11 @@ export function create_jwt(user_id) {
   return token;
 }
 
-export function check_jwt(token) {
+export function check_jwt(token, user_id) {
   let decoded_token = jwt.decode(token, process.env.SECRET);
-  return (decoded_token != null);
+  if (decoded_token != null && decoded_token['user_id'] == user_id) {
+    return true
+  } else {
+    return false;
+  }
 }
