@@ -3,7 +3,8 @@ import {
   add_group,
   add_user_to_group,
   delete_user_from_group,
-  get_users_count
+  get_users_count,
+  get_group_msgs
 } from '../service/group_service.js';
 import { check_secret } from '../service/security.js';
 
@@ -43,6 +44,11 @@ group_router.get('/get_users_count/:group_id', async function (req, res) {
   } else {
     res.send({ 'status': true, 'users_count': (await get_users_count(req.params.group_id)) })
   }
+});
+
+group_router.get('/get_group_msgs/:group_id', async function (req, res) {
+  let result = await get_group_msgs(req.params.group_id);
+  res.send({ 'status': true, 'messages': result });
 });
 
 export default group_router;

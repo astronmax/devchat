@@ -43,3 +43,23 @@ export async function get_users_count(group_id) {
   );
   return rows[0]['users_count'];
 }
+
+export async function get_group_msgs(group_id) {
+  const con = await mysql.createConnection(db_data);
+  const [rows, _] = await con.execute(
+    'SELECT * FROM `GroupMessage` WHERE `group` = ? ORDER BY `GroupMessageID`',
+    [group_id]
+  );
+  let result = [];
+  for (let i = 0; i < rows.length; i++) {
+    const [tmp, _] = await con.execute(
+      'SELECT `name` FROM `User` WHERE `UserID` = ?',
+      [rows[i]['author']]
+    );
+
+    let name = tmp[0]['name'];
+    result.push({ username: name, body: rows[i]['body'], id: rows[i]['GroupMessageID'] });
+  }
+
+  return result;
+}

@@ -1,5 +1,12 @@
 import express from "express";
-import { add_user, try_login, get_user_by_id } from '../service/user_service.js';
+import {
+  add_user,
+  try_login,
+  get_user_by_id,
+  get_groups,
+  get_directs,
+  get_direct_msgs,
+} from '../service/user_service.js';
 import { create_jwt, check_jwt } from '../service/security.js';
 
 const user_router = express.Router();
@@ -34,6 +41,21 @@ user_router.get('/jwt/check/:user_id', async function (req, res) {
 user_router.get('/get/:id', async function (req, res) {
   let user = await get_user_by_id(req.params.id);
   res.send({ 'status': true, 'name': user['name'] });
+});
+
+user_router.get('/get_groups/:id', async function (req, res) {
+  let result = await get_groups(req.params.id);
+  res.send({ 'status': true, 'groups': result });
+});
+
+user_router.get('/get_directs/:id', async function (req, res) {
+  let result = await get_directs(req.params.id);
+  res.send({ 'status': true, 'directs': result });
+});
+
+user_router.get('/get_direct_msgs/:user_id/:direct_id', async function (req, res) {
+  let result = await get_direct_msgs(req.params.user_id, req.params.direct_id);
+  res.send({ 'status': true, 'messages': result });
 });
 
 export default user_router;
