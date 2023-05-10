@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../App.css';
+import axios from 'axios';
 
 import {
   displayGroups,
@@ -10,16 +11,19 @@ import {
 } from '../MainWindowSlice'
 import { useDispatch, useSelector } from 'react-redux';
 
-const addGroup = () => {
+async function addGroup() {
   let new_grp_input = document.getElementById("new_group_input");
-  let text = new_grp_input.value;
+  let group_name = new_grp_input.value;
 
-  // add group logic...
+  let url = `http://127.0.0.1:4000/api/group/add/${group_name}?secret=secret`;
+  await axios.post(url);
+
   window.location.reload();
 }
 
 const Signout = () => {
-  // sign out logic...
+  document.cookie = `token=none&user_id=0`;
+  window.location.reload();
 }
 
 const Dropdown = ({ username }) => {

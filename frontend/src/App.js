@@ -2,6 +2,7 @@ import AppRouter from './components/AppRouter';
 import './App.css';
 
 import { setAuthorized } from './AuthWindowSlice';
+import { setCurrentUser } from './MainWindowSlice';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
@@ -15,7 +16,10 @@ const App = () => {
     axios.get(`http://127.0.0.1:4000/api/user/jwt/check/${user_id}`, {
       params: { token: parsed_token }
     }).then((resp) => {
-      if (resp.data['status'] === true) dispatch(setAuthorized());
+      if (resp.data['status'] === true) {
+        dispatch(setAuthorized());
+        dispatch(setCurrentUser(user_id));
+      };
     });
   }
 

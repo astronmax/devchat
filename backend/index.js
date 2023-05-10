@@ -1,5 +1,6 @@
 import express from 'express';
 import user_router from './controller/user_controller.js';
+import group_router from './controller/group_controller.js';
 import { hash } from './service/security.js';
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api/user/', user_router);
+app.use('/api/group/', group_router);
 
 app.get('/api/hash/:text', async function (req, res) {
   res.send({ 'status': true, 'result': hash(req.params.text) });

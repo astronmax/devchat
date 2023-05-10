@@ -31,3 +31,9 @@ export async function try_login(login, password) {
 
   return 0;
 }
+
+export async function get_user_by_id(user_id) {
+  const con = await mysql.createConnection(db_data);
+  const [rows, _] = await con.execute('SELECT * FROM `User` WHERE `UserID` = ?', [user_id]);
+  return rows[0];
+}

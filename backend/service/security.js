@@ -18,3 +18,7 @@ export function check_jwt(token, user_id) {
     return false;
   }
 }
+
+export function check_secret(secret) {
+  return (hash(secret) == hash(process.env.SECRET));
+}

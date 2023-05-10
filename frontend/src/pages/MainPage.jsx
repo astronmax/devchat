@@ -11,6 +11,8 @@ import {
   selectConversation,
   selectCurrentUser
 } from '../MainWindowSlice'
+import { useState } from 'react';
+import axios from 'axios';
 
 const get_groups = () => {
   console.log("Getting groups...");
@@ -46,8 +48,11 @@ const get_group_msgs = (id) => {
 
 const MainPage = () => {
   const user_id = useSelector(selectCurrentUser);
-  console.log("USER ID", user_id);
-  const username = "astron";
+  console.log("USER:", user_id);
+  const [username, setUsername] = useState('');
+
+  axios.get(`http://127.0.0.1:4000/api/user/get/${user_id}`)
+    .then((resp) => setUsername(resp.data['name']));
 
   const sidebar_display = useSelector(selectSidebarDisplay);
   const content_type = sidebar_display ? "Directs" : "Groups";
