@@ -109,3 +109,10 @@ export async function get_direct_msgs(user_id, direct_id) {
 
   return result;
 }
+
+export async function delete_direct(user_id, direct_id) {
+  const con = await mysql.createConnection(db_data);
+  const sql = 'DELETE FROM `DirectMessage` WHERE (`source` = ? AND `destination` = ?) OR (`source` = ? AND `destination` = ?);';
+  await con.execute(sql, [user_id, direct_id, direct_id, user_id]);
+  return true;
+}

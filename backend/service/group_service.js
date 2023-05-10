@@ -26,9 +26,9 @@ export async function add_user_to_group(group_id, user_id) {
   return true;
 }
 
-export async function delete_user_from_group(group_id, user_id) {
+export async function delete_user_from_group(user_id, group_id) {
   const con = await mysql.createConnection(db_data);
-  const [rows, _] = await con.execute(
+  await con.execute(
     'DELETE FROM `User_Group` WHERE `group` = ? AND `user` = ?',
     [group_id, user_id]
   );
