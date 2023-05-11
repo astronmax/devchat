@@ -10,12 +10,12 @@ import { check_secret } from '../service/security.js';
 
 const group_router = express.Router();
 
-group_router.post('/add/:name', async function (req, res) {
+group_router.post('/add/:name/:user_id', async function (req, res) {
   let secret = req.query['secret'];
   if (!check_secret(secret)) {
     res.send({ 'status': false });
   } else {
-    res.send({ 'status': (await add_group(req.params.name)) });
+    res.send({ 'status': (await add_group(req.params.name, req.params.user_id)) });
   }
 })
 

@@ -7,6 +7,9 @@ import {
   get_directs,
   get_direct_msgs,
   delete_direct,
+  add_direct,
+  add_in_group,
+  get_all,
 } from '../service/user_service.js';
 import { create_jwt, check_jwt } from '../service/security.js';
 
@@ -62,6 +65,21 @@ user_router.get('/get_direct_msgs/:user_id/:direct_id', async function (req, res
 user_router.delete('/delete_direct/:user_id/:direct_id', async function (req, res) {
   let result = await delete_direct(req.params.user_id, req.params.direct_id);
   res.send({ 'status': result });
+});
+
+user_router.post('/add_direct/:current_user_id/:user_id', async function (req, res) {
+  let result = await add_direct(req.params.current_user_id, req.params.user_id);
+  res.send({ 'status': result });
+});
+
+user_router.post('/add_in_group/:user_id/:group_id', async function (req, res) {
+  let result = await add_in_group(req.params.user_id, req.params.group_id);
+  res.send({ 'status': result });
+});
+
+user_router.get('/get_all/:user_id', async function (req, res) {
+  let result = await get_all(req.params.user_id);
+  res.send({ 'status': true, 'users': result });
 });
 
 export default user_router;

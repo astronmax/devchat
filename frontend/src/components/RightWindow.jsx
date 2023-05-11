@@ -7,16 +7,7 @@ import {
 } from "../MainWindowSlice";
 import { noUserlistDisplay } from "../MainWindowSlice";
 import { useState } from "react";
-
-const addDirect = (user_id, current_user) => {
-  console.log("Add direct with user: ", user_id);
-  // add direct logic...
-}
-
-const addUserInGroup = (user_id, group_id) => {
-  console.log("Add user ", user_id, " in group");
-  // add user in group logic...
-}
+import axios from 'axios';
 
 export const UserComponent = ({ user }) => {
   const sidebar_display = useSelector(selectSidebarDisplay);
@@ -26,7 +17,12 @@ export const UserComponent = ({ user }) => {
   return (
     <div className="p-0 m-0 mb-2">
       <a className="text-decoration-none link-secondary" onClick={() => {
-        sidebar_display ? addDirect(user.id, current_user) : addUserInGroup(user.id, group_id);
+        if (sidebar_display == 1) {
+          axios.post(`http://127.0.0.1:4000/api/user/add_direct/${current_user}/${user.id}`);
+        } else {
+          axios.post(`http://127.0.0.1:4000/api/user/add_in_group/${user.id}/${group_id}`);
+        }
+        window.location.reload();
       }}>{user.username}</a>
     </div>
   );
@@ -34,15 +30,9 @@ export const UserComponent = ({ user }) => {
 
 const RightWindow = () => {
   const userlist_display = useSelector(selectUserlistDisplay);
+  const user_id = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
-
-  let users = [
-    { username: "user_1", id: 1 },
-    { username: "user_2", id: 2 },
-    { username: "user_3", id: 3 }
-  ];
-
-  const [users_filtered, setUsers] = useState(users);
+  const [users_filtered, setUsers] = useState([{ username: '', id: 0 }]);
 
   return (
     userlist_display
@@ -57,8 +47,10 @@ const RightWindow = () => {
             <img src="/icons/icon-cross.svg" width="40" height="40"></img>
           </a>
         </div >
-        <input type="text" id="search_user_input" className="form-control mb-3" onChange={() => {
+        <input type="text" id="search_user_input" className="form-control mb-3" onChange={async function () {
           let pattern = document.getElementById("search_user_input").value;
+          let resp = (await axios.get(`http://127.0.0.1:4000/api/user/get_all/${user_id}`)).data;
+          let users = resp['users'];
           let new_users = [];
           for (let i = 0; i < users.length; i++) {
             if (users[i].username.includes(pattern)) {

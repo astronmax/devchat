@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise';
+import { add_in_group } from './user_service.js';
 
 const db_data = {
   host: process.env.DB_HOST,
@@ -7,13 +8,16 @@ const db_data = {
   database: process.env.DB_DATABASE
 }
 
-export async function add_group(group_name) {
+export async function add_group(group_name, user_id) {
   const con = await mysql.createConnection(db_data);
   const [rows, _] = await con.execute('SELECT * FROM `Group` WHERE `name` = ?', [group_name]);
   if (rows.length > 0) {
     return false;
   }
   await con.execute('INSERT INTO `Group` (`name`) VALUES (?)', [group_name]);
+  let [tmp, fields] = await con.execute('SELECT * FROM `Group` WHERE `name` = ?', [group_name]);
+  let group_id = tmp[0]['GroupID'];
+  add_in_group(user_id, group_id);
   return true;
 }
 

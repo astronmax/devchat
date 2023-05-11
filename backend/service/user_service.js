@@ -116,3 +116,27 @@ export async function delete_direct(user_id, direct_id) {
   await con.execute(sql, [user_id, direct_id, direct_id, user_id]);
   return true;
 }
+
+export async function add_direct(current_user_id, user_id) {
+  const con = await mysql.createConnection(db_data);
+  const sql = 'INSERT INTO `DirectMessage` (`source`, `destination`, `body`) VALUES (?, ?, ?)';
+  await con.execute(sql, [current_user_id, user_id, "[start direct]"]);
+  return true;
+}
+
+export async function add_in_group(user_id, group_id) {
+  const con = await mysql.createConnection(db_data);
+  const sql = 'INSERT INTO `User_Group` (`user`, `group`) VALUES (?, ?);';
+  await con.execute(sql, [user_id, group_id]);
+  return true;
+}
+
+export async function get_all(user_id) {
+  const con = await mysql.createConnection(db_data);
+  let [rows, _] = await con.execute('SELECT `UserID` AS `id`, `name` FROM `User` WHERE `UserID` != ?', [user_id]);
+  let result = [];
+  for (let i = 0; i < rows.length; i++) {
+    result.push({ username: rows[i]['name'], id: rows[i]['id'] });
+  }
+  return result;
+}

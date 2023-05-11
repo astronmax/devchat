@@ -7,15 +7,16 @@ import {
   displayDirects,
   setConversation,
   selectSidebarDisplay,
-  selectConversation
+  selectConversation,
+  selectCurrentUser
 } from '../MainWindowSlice'
 import { useDispatch, useSelector } from 'react-redux';
 
-async function addGroup() {
+async function addGroup(user_id) {
   let new_grp_input = document.getElementById("new_group_input");
   let group_name = new_grp_input.value;
 
-  let url = `http://127.0.0.1:4000/api/group/add/${group_name}?secret=secret`;
+  let url = `http://127.0.0.1:4000/api/group/add/${group_name}/${user_id}?secret=secret`;
   await axios.post(url);
 
   window.location.reload();
@@ -70,6 +71,7 @@ export const ListItem = ({ title, conversation_id }) => {
 const SideBar = ({ username, content_type, items }) => {
   const [display_add_group, setDisplayAddGroup] = useState(0);
   const sidebar_display = useSelector(selectSidebarDisplay);
+  const user_id = useSelector(selectCurrentUser);
 
   return (
     <div className="sidebar d-flex flex-column flex-shrink-0 p-2 text-white">
@@ -91,12 +93,14 @@ const SideBar = ({ username, content_type, items }) => {
         (display_add_group && !sidebar_display)
           ?
           <div className="px-3 mt-3 d-flex" id="display_add_group" style={{ height: "30px" }}>
-            <input type="text" id="new_group_input" onKeyUp={(event) => {
+            <input type="text" id="new_group_input" onKeyUp={async function (event) {
               if (event.keyCode == 13) {
-                addGroup();
+                await addGroup(user_id);
               }
             }} className="form-control" placeholder="Name" />
-            <button className='btn btn-primary btn-sm' onClick={addGroup}>Add</button>
+            <button className='btn btn-primary btn-sm' onClick={async function () {
+              await addGroup(user_id);
+            }}>Add</button>
           </div>
           :
           <></>
