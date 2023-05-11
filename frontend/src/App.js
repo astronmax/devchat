@@ -6,6 +6,9 @@ import { setCurrentUser } from './MainWindowSlice';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
+export const WS_URL = 'ws://192.168.1.14:8080';
+export const API_URL = 'http://192.168.1.14:4000';
+
 const App = () => {
   const dispatch = useDispatch();
 
@@ -13,7 +16,7 @@ const App = () => {
     let cookies = document.cookie.split('&');
     let parsed_token = cookies[0].split('=')[1];
     let user_id = cookies[1].split('=')[1];
-    axios.get(`http://127.0.0.1:4000/api/user/jwt/check/${user_id}`, {
+    axios.get(`${API_URL}/api/user/jwt/check/${user_id}`, {
       params: { token: parsed_token }
     }).then((resp) => {
       if (resp.data['status'] === true) {

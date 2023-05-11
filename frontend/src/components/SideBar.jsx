@@ -11,12 +11,13 @@ import {
   selectCurrentUser
 } from '../MainWindowSlice'
 import { useDispatch, useSelector } from 'react-redux';
+import { API_URL } from '../App';
 
 async function addGroup(user_id) {
   let new_grp_input = document.getElementById("new_group_input");
   let group_name = new_grp_input.value;
 
-  let url = `http://127.0.0.1:4000/api/group/add/${group_name}/${user_id}?secret=secret`;
+  let url = `${API_URL}/api/group/add/${group_name}/${user_id}?secret=secret`;
   await axios.post(url);
 
   window.location.reload();

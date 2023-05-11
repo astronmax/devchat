@@ -14,10 +14,11 @@ import {
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket';
+import { WS_URL, API_URL } from '../App';
 
 const MainPage = () => {
   const [newMessage, setNewMessage] = useState("");
-  useWebSocket('ws://127.0.0.1:8080', {
+  useWebSocket(WS_URL, {
     share: true,
     onMessage: (msg) => {
       setNewMessage(msg.data);
@@ -27,7 +28,7 @@ const MainPage = () => {
   const user_id = useSelector(selectCurrentUser);
   const [username, setUsername] = useState('');
 
-  axios.get(`http://127.0.0.1:4000/api/user/get/${user_id}`)
+  axios.get(`${API_URL}/api/user/get/${user_id}`)
     .then((resp) => setUsername(resp.data['name']));
 
   const sidebar_display = useSelector(selectSidebarDisplay);
@@ -35,10 +36,10 @@ const MainPage = () => {
   const [sidebar_items, setSidebarItems] = useState([{ title: '', id: 0, key: 0 }]);
   useEffect(() => {
     if (sidebar_display == 0) {
-      axios.get(`http://127.0.0.1:4000/api/user/get_groups/${user_id}`)
+      axios.get(`${API_URL}/api/user/get_groups/${user_id}`)
         .then((resp) => setSidebarItems(resp.data['groups']));
     } else {
-      axios.get(`http://127.0.0.1:4000/api/user/get_directs/${user_id}`)
+      axios.get(`${API_URL}/api/user/get_directs/${user_id}`)
         .then((resp) => setSidebarItems(resp.data['directs']));
     }
   }, [sidebar_display]);
@@ -47,10 +48,10 @@ const MainPage = () => {
   const [msgs, setMsgs] = useState([{ username: '', body: '', id: 0 }]);
   useEffect(() => {
     if (sidebar_display == 1) {
-      axios.get(`http://127.0.0.1:4000/api/user/get_direct_msgs/${user_id}/${conversation}`)
+      axios.get(`${API_URL}/api/user/get_direct_msgs/${user_id}/${conversation}`)
         .then((resp) => setMsgs(resp.data['messages']));
     } else {
-      axios.get(`http://127.0.0.1:4000/api/group/get_group_msgs/${conversation}`)
+      axios.get(`${API_URL}/api/group/get_group_msgs/${conversation}`)
         .then((resp) => setMsgs(resp.data['messages']));
     }
   }, [conversation]);

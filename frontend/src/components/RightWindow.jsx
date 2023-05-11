@@ -8,6 +8,7 @@ import {
 import { noUserlistDisplay } from "../MainWindowSlice";
 import { useState } from "react";
 import axios from 'axios';
+import { API_URL } from '../App';
 
 export const UserComponent = ({ user }) => {
   const sidebar_display = useSelector(selectSidebarDisplay);
@@ -18,9 +19,9 @@ export const UserComponent = ({ user }) => {
     <div className="p-0 m-0 mb-2">
       <a className="text-decoration-none link-secondary" onClick={() => {
         if (sidebar_display == 1) {
-          axios.post(`http://127.0.0.1:4000/api/user/add_direct/${current_user}/${user.id}`);
+          axios.post(`${API_URL}/api/user/add_direct/${current_user}/${user.id}`);
         } else {
-          axios.post(`http://127.0.0.1:4000/api/user/add_in_group/${user.id}/${group_id}`);
+          axios.post(`${API_URL}/api/user/add_in_group/${user.id}/${group_id}`);
         }
         window.location.reload();
       }}>{user.username}</a>
@@ -49,7 +50,7 @@ const RightWindow = () => {
         </div >
         <input type="text" id="search_user_input" className="form-control mb-3" onChange={async function () {
           let pattern = document.getElementById("search_user_input").value;
-          let resp = (await axios.get(`http://127.0.0.1:4000/api/user/get_all/${user_id}`)).data;
+          let resp = (await axios.get(`${API_URL}/api/user/get_all/${user_id}`)).data;
           let users = resp['users'];
           let new_users = [];
           for (let i = 0; i < users.length; i++) {

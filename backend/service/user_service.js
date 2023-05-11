@@ -147,6 +147,6 @@ export async function add_direct_msg(user_id, dest_id, body) {
     'INSERT INTO `DirectMessage` (`source`, `destination`, `body`) VALUES (?, ?, ?)',
     [user_id, dest_id, body]
   );
-  let [rows, _] = await con.execute('SELECT MAX(`GroupMessageID`) AS `ID` FROM `DirectMessage`');
+  let [rows, _] = await con.execute('SELECT MAX(`DirectMessageID`) AS `ID` FROM `DirectMessage`');
   return rows[0]['ID'];
 }

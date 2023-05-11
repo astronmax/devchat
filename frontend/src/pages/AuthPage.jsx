@@ -14,10 +14,11 @@ import {
 import { setCurrentUser } from '../MainWindowSlice';
 import { useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../App';
 
 async function tryLogin(login, password) {
-  const pw_hash = (await axios.get(`http://127.0.0.1:4000/api/hash/${password}`)).data['result'];
-  const resp = (await axios.get(`http://127.0.0.1:4000/api/user/login/${login}/${pw_hash}`)).data;
+  const pw_hash = (await axios.get(`${API_URL}/api/hash/${password}`)).data['result'];
+  const resp = (await axios.get(`${API_URL}/api/user/login/${login}/${pw_hash}`)).data;
   if (resp['status'] === true) {
     return resp['user_id'];
   }
@@ -26,13 +27,13 @@ async function tryLogin(login, password) {
 }
 
 async function registerUser(username, password) {
-  const pw_hash = (await axios.get(`http://127.0.0.1:4000/api/hash/${password}`)).data['result'];
-  return (await axios.post(`http://127.0.0.1:4000/api/user/add/${username}/${pw_hash}`)).data['status'];
+  const pw_hash = (await axios.get(`${API_URL}/api/hash/${password}`)).data['result'];
+  return (await axios.post(`${API_URL}/api/user/add/${username}/${pw_hash}`)).data['status'];
 }
 
 async function loadJWT(name, password, user_id) {
-  const pw_hash = (await axios.get(`http://127.0.0.1:4000/api/hash/${password}`)).data['result'];
-  const resp = (await axios.get(`http://127.0.0.1:4000/api/user/jwt/get/${name}/${pw_hash}`)).data;
+  const pw_hash = (await axios.get(`${API_URL}/api/hash/${password}`)).data['result'];
+  const resp = (await axios.get(`${API_URL}/api/user/jwt/get/${name}/${pw_hash}`)).data;
   const token = resp['token'];
   document.cookie = `token=${token}&user_id=${user_id}`;
 }

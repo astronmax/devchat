@@ -9,6 +9,7 @@ import {
 } from '../MainWindowSlice';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../App';
 
 const Header = () => {
   const user_id = useSelector(selectCurrentUser);
@@ -18,7 +19,7 @@ const Header = () => {
   let [members_count, setMembersCount] = useState(0);
   useEffect(() => {
     if (sidebar_display == 0) {
-      axios.get(`http://127.0.0.1:4000/api/group/get_users_count/${conversation}`)
+      axios.get(`${API_URL}/api/group/get_users_count/${conversation}`)
         .then((resp) => setMembersCount(resp.data['users_count']));
     }
   }, [conversation]);
@@ -42,10 +43,10 @@ const Header = () => {
           </a>
           <a href="/" className="me-4" onClick={async function () {
             if (sidebar_display == 1) {
-              const url = `http://127.0.0.1:4000/api/user/delete_direct/${user_id}/${conversation}`;
+              const url = `${API_URL}/api/user/delete_direct/${user_id}/${conversation}`;
               await axios.delete(url);
             } else {
-              const url = `http://127.0.0.1:4000/api/group/delete_user/${user_id}/${conversation}`;
+              const url = `${API_URL}/api/group/delete_user/${user_id}/${conversation}`;
               await axios.delete(url);
             }
           }}>

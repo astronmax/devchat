@@ -2,9 +2,10 @@ import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket';
 import '../App.css';
 import { useSelector } from 'react-redux';
 import { selectConversation, selectCurrentUser, selectSidebarDisplay } from '../MainWindowSlice';
+import { WS_URL } from '../App';
 
 const AppFooter = () => {
-  const { sendMessage } = useWebSocket('ws://127.0.0.1:8080', {
+  const { sendMessage } = useWebSocket(WS_URL, {
     share: true,
   });
 

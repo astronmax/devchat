@@ -27,7 +27,7 @@ app.listen(4000);
 const wss = new WebSocketServer({ port: 8080 });
 
 let sockets = [];
-wss.on('connection', function (ws) {
+wss.on('connection', function (ws, req) {
   sockets.push(ws);
   console.log("[+] New WebSocket connection");
 
