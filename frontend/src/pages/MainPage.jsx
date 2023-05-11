@@ -64,7 +64,14 @@ const MainPage = () => {
           setMsgs([...msgs, new_item]);
         }
       } else {
+        if (json_msg['dst'] !== 0) {
+          if ((json_msg['src'] == user_id && json_msg['dst'] == conversation) ||
+            (json_msg['src'] == conversation && json_msg['dst'] == user_id)) {
 
+            let new_item = { username: json_msg['username'], body: json_msg['body'], id: json_msg['id'] }
+            setMsgs([...msgs, new_item]);
+          }
+        }
       }
     }
   }, [newMessage]);

@@ -143,9 +143,10 @@ export async function get_all(user_id) {
 
 export async function add_direct_msg(user_id, dest_id, body) {
   const con = await mysql.createConnection(db_data);
-  let [rows, _] = await con.execute(
+  await con.execute(
     'INSERT INTO `DirectMessage` (`source`, `destination`, `body`) VALUES (?, ?, ?)',
     [user_id, dest_id, body]
   );
-  return true;
+  let [rows, _] = await con.execute('SELECT MAX(`GroupMessageID`) AS `ID` FROM `DirectMessage`');
+  return rows[0]['ID'];
 }
