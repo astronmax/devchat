@@ -1,20 +1,26 @@
+import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket';
 import '../App.css';
-
-const sendMsg = () => {
-  console.log("SEND MSG");
-}
+import { useSelector } from 'react-redux';
+import { selectConversation, selectCurrentUser, selectSidebarDisplay } from '../MainWindowSlice';
 
 const AppFooter = () => {
+  const { sendMessage } = useWebSocket('ws://127.0.0.1:8080', {
+    share: true,
+  });
+
+  const sidebar_display = useSelector(selectSidebarDisplay);
+  const user_id = useSelector(selectCurrentUser);
+  const conversation = useSelector(selectConversation);
+
   return (
     <div className='app-footer'>
-      <input type='text' className="form-control" placeholder='Enter message' onKeyUp={(event) => {
-        if (event.keyCode == 13) {
-          sendMsg();
-        }
-      }}></input>
+      <input type='text' id='messageInput' className="form-control" placeholder='Enter message'></input>
       <a href="/" className='mx-3' onClick={(e) => {
         e.preventDefault();
-        sendMsg();
+        let text = document.getElementById('messageInput').value;
+        let msg = { 'type': sidebar_display, 'src': Number(user_id), 'dst': conversation, 'body': text };
+        sendMessage(JSON.stringify(msg));
+        document.getElementById('messageInput').value = '';
       }}>
         <img src="/icons/icon-send-msg.svg" width="32" height="32"></img>
       </a>

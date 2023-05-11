@@ -13,8 +13,17 @@ import {
 } from '../MainWindowSlice'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket';
 
 const MainPage = () => {
+  const [newMessage, setNewMessage] = useState("");
+  useWebSocket('ws://127.0.0.1:8080', {
+    share: true,
+    onMessage: (msg) => {
+      setNewMessage(msg.data);
+    }
+  });
+
   const user_id = useSelector(selectCurrentUser);
   const [username, setUsername] = useState('');
 
@@ -45,6 +54,20 @@ const MainPage = () => {
         .then((resp) => setMsgs(resp.data['messages']));
     }
   }, [conversation]);
+
+  useEffect(() => {
+    if (newMessage != "") {
+      let json_msg = JSON.parse(newMessage);
+      if (json_msg['type'] == 0) {
+        if (json_msg['dst'] == conversation && json_msg['dst'] !== 0) {
+          let new_item = { username: json_msg['username'], body: json_msg['body'], id: json_msg['id'] }
+          setMsgs([...msgs, new_item]);
+        }
+      } else {
+
+      }
+    }
+  }, [newMessage]);
 
   return (
     <div className='d-flex'>

@@ -67,3 +67,14 @@ export async function get_group_msgs(group_id) {
 
   return result;
 }
+
+export async function add_group_msg(author, group_id, body) {
+  const con = await mysql.createConnection(db_data);
+  await con.execute(
+    'INSERT INTO `GroupMessage` (`author`, `group`, `body`) VALUES (?, ?, ?);',
+    [author, group_id, body]
+  );
+
+  const [rows, _] = await con.execute('SELECT MAX(`GroupMessageID`) AS `ID` FROM `GroupMessage`');
+  return rows[0]['ID'];
+}
